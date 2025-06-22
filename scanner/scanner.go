@@ -47,7 +47,7 @@ func New(timeout time.Duration) *PortScanner {
 	return &PortScanner{timeout: timeout}
 }
 
-func (s *PortScanner) getStringProtocol(p Protocol) string {
+func GetStringProtocol(p Protocol) string {
 	if p == ProtocolTCP {
 		return "tcp"
 	}
@@ -64,7 +64,7 @@ func dial(ctx context.Context, network, address string, timeout time.Duration) (
 func (s *PortScanner) checkPort(ctx context.Context, wg *sync.WaitGroup, ip IPAddress, port Port, result chan<- PortScanResult) {
 	defer wg.Done()
 
-	conn, err := dial(ctx, s.getStringProtocol(port.Protocol), fmt.Sprintf("%s:%d", ip, port.Number), s.timeout)
+	conn, err := dial(ctx, GetStringProtocol(port.Protocol), fmt.Sprintf("%s:%d", ip, port.Number), s.timeout)
 
 	if err == nil {
 		conn.Close()
